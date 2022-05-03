@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "31979284044",
+    "project_id": "reservoir-near-you",
+    "storage_bucket": "reservoir-near-you.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31979284044:android:3a5360ef4d686df701f6e9",
+        "android_client_info": {
+          "package_name": "com.example.reservoir_near_you"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31979284044-7il4e5nuvd2i1qnq9t9hrv3q3avts5d4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjUD11gGFeQdYdOv8DxvhAmjySOyx6zwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31979284044-7il4e5nuvd2i1qnq9t9hrv3q3avts5d4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
