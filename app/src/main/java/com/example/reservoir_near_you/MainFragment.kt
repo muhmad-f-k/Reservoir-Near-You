@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import com.example.reservoir_near_you.databinding.FragmentMainBinding
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -58,6 +59,8 @@ class MainFragment : Fragment() {
                     TAG,
                     "Successfully signed in user ${FirebaseAuth.getInstance().currentUser?.displayName}!"
                 )
+                var action = MainFragmentDirections.actionMainFragmentToMapsFragment()
+                view?.findNavController()?.navigate(action)
             } else {
                 Log.i(TAG, "Sign in unsuccessful ${response?.error?.errorCode}")
             }
