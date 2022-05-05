@@ -30,7 +30,6 @@ android {
 
     buildFeatures {
         dataBinding true
-        viewBinding true
     }
 
     compileOptions {
@@ -70,6 +69,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

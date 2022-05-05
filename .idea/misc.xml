@@ -3,10 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/jonat/AndroidStudioProjects/Reservoir-Near-You/app/src/main/res/drawable/ic_baseline_login_24.xml" value="0.1565" />
+        <entry key="..\:/Users/jonat/AndroidStudioProjects/Reservoir-Near-You/app/src/main/res/drawable/login_with_text.xml" value="0.1565" />
         <entry key="..\:/Users/jonat/AndroidStudioProjects/Reservoir-Near-You/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
         <entry key="..\:/Users/jonat/AndroidStudioProjects/Reservoir-Near-You/app/src/main/res/layout/fragment_login.xml" value="0.1" />
         <entry key="..\:/Users/jonat/AndroidStudioProjects/Reservoir-Near-You/app/src/main/res/layout/fragment_main.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/jonat/AndroidStudioProjects/Reservoir-Near-You/app/src/main/res/layout/fragment_maps.xml" value="0.12407407407407407" />
+        <entry key="..\:/Users/jonat/AndroidStudioProjects/Reservoir-Near-You/app/src/main/res/layout/login_logout.xml" value="0.264" />
+        <entry key="..\:/Users/jonat/AndroidStudioProjects/Reservoir-Near-You/app/src/main/res/menu/menu.xml" value="0.264" />
       </map>
     </option>
   </component>

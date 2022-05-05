@@ -4,6 +4,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/2e77801846e4a38b7680205a0ba0aacc/transformed/play-services-maps-18.0.2/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2e77801846e4a38b7680205a0ba0aacc/transformed/play-services-maps-18.0.2/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2e77801846e4a38b7680205a0ba0aacc/transformed/play-services-maps-18.0.2/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/eb22080f28b7e1b0942e9f90b623be71/transformed/play-services-maps-18.0.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/eb22080f28b7e1b0942e9f90b623be71/transformed/play-services-maps-18.0.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/eb22080f28b7e1b0942e9f90b623be71/transformed/play-services-maps-18.0.2/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.android.gms/play-services-maps/18.0.2/b21c7a3eb0f99d941e7d6a1f7ec27846c3b74ae/play-services-maps-18.0.2-javadoc.jar!/" />
