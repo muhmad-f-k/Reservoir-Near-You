@@ -85,7 +85,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
-                TODO("Her må vi vise brukeren at han har gitt oss permissions")
                 /*fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
                         Log.d("wow", location?.latitude.toString())
                         Log.d("wow1", location?.longitude.toString())
@@ -104,14 +103,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         mMap = googleMap
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
             val markerPos = LatLng(location!!.latitude, location.longitude)
-            mMap.addMarker(
-                MarkerOptions()
-                    .position(markerPos));
+            mMap.addMarker(MarkerOptions().position(markerPos))
             val cameraPosition = CameraPosition.Builder()
                 .target(markerPos)
                 .zoom(15f).build()
 
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
         }
+        val foorstevatn = LatLng(68.44548, 17.48152)
+        val pumpvatnet = LatLng(68.44240, 17.52777)
+        mMap.addMarker(MarkerOptions().position(foorstevatn))
+        mMap.addMarker(MarkerOptions().position(pumpvatnet))
     }
 }

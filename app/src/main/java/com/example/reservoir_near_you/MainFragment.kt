@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -75,7 +76,7 @@ class MainFragment : Fragment() {
                     binding.authButton.text = getString(R.string.logout_button_text)
                     binding.authButton.setOnClickListener {
                         AuthUI.getInstance().signOut(requireContext())
-                        activity?.invalidateOptionsMenu()
+                        requireActivity().invalidateOptionsMenu()
                     }
                 }
                 else -> {
@@ -83,6 +84,7 @@ class MainFragment : Fragment() {
                     binding.authButton.setOnClickListener{
                         launchSignInFlow()
                     }
+                    activity?.invalidateOptionsMenu()
                 }
             }
         })
@@ -100,15 +102,11 @@ class MainFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
         if (viewModel.authenticationState.value != LoginViewModel.AuthenticationState.AUTHENTICATED) {
-            Log.d("muhmad", "test")
             menu.findItem(R.id.map).isEnabled = false
             menu.findItem(R.id.login_logout).isVisible = false
         }
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -120,7 +118,6 @@ class MainFragment : Fragment() {
             }
             R.id.login_logout -> {
                 AuthUI.getInstance().signOut(requireContext())
-                activity?.invalidateOptionsMenu()
                 true
             }
             else -> super.onOptionsItemSelected(item)
