@@ -85,11 +85,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
-                fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
-                    Log.d("wow", location?.latitude.toString())
-                    Log.d("wow1", location?.longitude.toString())
-                }
+                TODO("Her må vi vise brukeren at han har gitt oss permissions")
+                /*fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+                        Log.d("wow", location?.latitude.toString())
+                        Log.d("wow1", location?.longitude.toString())
+                }*/
             } else {
+                TODO("Her må vi vise brukeren at han ikke har gitt oss permissions")
                 // Do otherwise
             }
         }
