@@ -1,27 +1,35 @@
 package com.example.reservoir_near_you
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.location.Location
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.provider.CallLog
 import android.util.Log
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.example.reservoir_near_you.databinding.FragmentMainBinding
 import com.firebase.ui.auth.AuthUI
 import com.example.reservoir_near_you.databinding.FragmentMapsBinding
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-class MapsFragment : Fragment() {
 
-    private val viewModel by viewModels<LoginViewModel>()
+class MapsFragment : Fragment() {
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var binding: FragmentMapsBinding
+
+
 
     private val callback = OnMapReadyCallback { googleMap ->
 
@@ -35,6 +43,9 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireContext())
+        getUserLocation()
 
         binding = DataBindingUtil.inflate(
             inflater,
@@ -71,5 +82,23 @@ class MapsFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         })
+    }
+    @SuppressLint("MissingPermission")
+    private fun getUserLocation() {
+
+        val permissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+                    Log.d("wow", location?.latitude.toString())
+                    Log.d("wow1", location?.longitude.toString())
+                }
+            } else {
+                // Do otherwise
+            }
+        }
+
+        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 }
