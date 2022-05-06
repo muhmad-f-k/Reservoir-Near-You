@@ -22,6 +22,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
@@ -30,13 +31,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var binding: FragmentMapsBinding
     private lateinit var mMap: GoogleMap
-
-    /*private val callback = OnMapReadyCallback { googleMap ->
-
-        val narvik = LatLng(68.438499, 17.427261)
-        googleMap.addMarker(MarkerOptions().position(narvik).title("Marker in Narvik"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(narvik, 15f))
-    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -103,10 +97,19 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val narvik = LatLng(68.438499, 17.427261)
-        googleMap.addMarker(MarkerOptions().position(narvik).title("Marker in Narvik"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(narvik, 15f))
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+            val markerPos = LatLng(location!!.latitude, location.longitude)
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(markerPos));
+            val cameraPosition = CameraPosition.Builder()
+                .target(markerPos)
+                .zoom(15f).build()
+
+            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+        }
     }
 }
