@@ -19,24 +19,24 @@ import com.example.reservoir_near_you.databinding.FragmentMapsBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
 
-class MapsFragment : Fragment() {
+class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var binding: FragmentMapsBinding
+    private lateinit var mMap: GoogleMap
 
-
-
-    private val callback = OnMapReadyCallback { googleMap ->
+    /*private val callback = OnMapReadyCallback { googleMap ->
 
         val narvik = LatLng(68.438499, 17.427261)
         googleMap.addMarker(MarkerOptions().position(narvik).title("Marker in Narvik"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(narvik, 15f))
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +53,7 @@ class MapsFragment : Fragment() {
             container,
             false
         )
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -60,7 +61,7 @@ class MapsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
+        mapFragment?.getMapAsync(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -100,5 +101,12 @@ class MapsFragment : Fragment() {
         }
 
         permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        val narvik = LatLng(68.438499, 17.427261)
+        googleMap.addMarker(MarkerOptions().position(narvik).title("Marker in Narvik"))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(narvik, 15f))
     }
 }
