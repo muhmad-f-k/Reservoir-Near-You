@@ -1,6 +1,6 @@
 package com.example.reservoir_near_you.api
 
-import com.example.reservoir_near_you.model.Magasinstatistikk
+import com.example.reservoir_near_you.model.Magasin
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Response
@@ -9,13 +9,17 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-private const val BASE_URL = "http://api.nve.no/doc/magasinstatistikk/"
+private const val BASE_URL = "http://85.159.209.56:5000/"
 
 interface SimpleApi {
-    @GET("/HentOffentligData")
+
+    @GET("/magasin")
     suspend fun getMagasin(
-        @Query("dato_id") dato_Id: String
-    ): Response<Magasinstatistikk>
+        @Query("id") id: Int
+    ): Response<Magasin>
+
+    @GET("/magasin")
+    suspend fun getAllMagasin(): Response<Magasin>
 }
 
 object RetrofitInstance {

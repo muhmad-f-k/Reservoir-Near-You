@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".MainFragment">
+    tools:context=".screen.MainFragment">
 
     <data>
         <variable
             name="LoginViewModel"
-            type="com.example.reservoir_near_you.LoginViewModel" />
+            type="com.example.reservoir_near_you.viewModels.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

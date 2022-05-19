@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MapsFragment">
+    tools:context=".screen.MapsFragment">
 
     <data>
         <variable
-            name="LoginViewModel"
-            type="com.example.reservoir_near_you.LoginViewModel" />
+            name="MagasinViewModel"
+            type="com.example.reservoir_near_you.viewModels.MagasinViewModel" />
     </data>
 
     <androidx.fragment.app.FragmentContainerView

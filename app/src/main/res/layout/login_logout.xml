@@ -8,10 +8,10 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
+        android:layout_centerHorizontal="true"
         android:clickable="true"
-        android:src="@drawable/ic_baseline_login_24"
         android:focusable="true"
-        android:layout_centerHorizontal="true"/>
+        android:src="@drawable/ic_baseline_login_24" />
     <TextView
         android:id="@+id/action_bar_login_logout"
         android:layout_width="wrap_content"
