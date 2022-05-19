@@ -128,34 +128,25 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListene
                 .zoom(10f).build()
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
-            var markers = mutableListOf<Marker>()
-            for ((key, value) in locationHashMap) {
-                mMap.addMarker(MarkerOptions().position(locationHashMap[value]).title(locationHashMap[key]))
-                    ?.let { markers.add(it) }
-                markers[key].tag = i + 1
+            val markers = mutableListOf<Marker>()
+            var markerIndex = 0
+            for ((key, value ) in locationHashMap) {
+                mMap.addMarker(MarkerOptions().position(key).title(value))?.let { markers.add(it) }
+                markers[markerIndex].tag = markerIndex + 1
+                markerIndex += 1
             }
+            mMap.setOnMarkerClickListener(this)
         }
-//        mMap.setOnMapClickListener(this)
-        /*val foorstevatn = LatLng(68.44548, 17.48152)
-        val pumpvatnet = LatLng(68.44240, 17.52777)
-        mMap.addMarker(MarkerOptions().position(foorstevatn))
-        mMap.addMarker(MarkerOptions().position(pumpvatnet))*/
     }
 
     override fun onMapClick(p0: LatLng) {
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        val reservoirId = marker.tag as? Int
-        val action = reservoirId?.let {
-            MapsFragmentDirections.actionMapsFragmentToMagasinFragment(
-                it
-            )
-        }
-        if (action != null) {
-            view?.findNavController()?.navigate(action)
-        }
-        return false
+        val reservoirId = marker.tag as Int
+        val action = MapsFragmentDirections.actionMapsFragmentToMagasinFragment(reservoirId)
+        view?.findNavController()?.navigate(action)
+        return true
     }
 
 
