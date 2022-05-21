@@ -40,6 +40,7 @@ class MainFragment : Fragment() {
         )
         setHasOptionsMenu(true)
 
+
         return binding.root
     }
 
@@ -100,11 +101,14 @@ class MainFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
         if (viewModel.authenticationState.value != LoginViewModel.AuthenticationState.AUTHENTICATED) {
             menu.findItem(R.id.map).isEnabled = false
             menu.findItem(R.id.login_logout).isVisible = false
         }
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
