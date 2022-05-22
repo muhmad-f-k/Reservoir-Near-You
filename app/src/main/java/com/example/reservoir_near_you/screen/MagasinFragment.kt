@@ -20,6 +20,7 @@ import com.example.reservoir_near_you.viewModels.MagasinViewModel
 import com.firebase.ui.auth.AuthUI
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -75,6 +76,7 @@ class MagasinFragment : Fragment() {
 
 
 
+
                 response.body()?.Magasin?.find { it.name == magasinNavn }?.name
 
                 barDataSet= BarDataSet(barList, "Vann Magasin")
@@ -86,6 +88,10 @@ class MagasinFragment : Fragment() {
                 barDataSet.valueTextColor= Color.BLACK
                 barDataSet.valueTextSize=15f
                 binding.barChart.bar_chart.setDrawValueAboveBar(true)
+                binding.barChart.bar_chart.animateY(10)
+                binding.barChart.bar_chart.animateX(10)
+
+
 
 
 
@@ -104,6 +110,24 @@ class MagasinFragment : Fragment() {
                 binding.lineChart.line_chart.description.textSize =13f
                 pieDataSet.valueTextColor= Color.BLACK
                 pieDataSet.valueTextSize=15f
+                binding.lineChart.line_chart.animateY(10)
+                binding.lineChart.line_chart.animateX(10)
+
+
+
+                binding.lineChart.line_chart.setUsePercentValues(true)
+                binding.lineChart.line_chart.setDrawEntryLabels(true)
+                //hollow pie chart
+//                binding.lineChart.line_chart.isDrawHoleEnabled = false
+//                binding.lineChart.line_chart.setTouchEnabled(false)
+//                binding.lineChart.line_chart.setDrawEntryLabels(false)
+                //adding padding
+                binding.lineChart.line_chart.setExtraOffsets(20f, 0f, 20f, 20f)
+                binding.lineChart.line_chart.setUsePercentValues(true)
+                binding.lineChart.line_chart.isRotationEnabled = false
+                binding.lineChart.line_chart.setDrawEntryLabels(false)
+                binding.lineChart.line_chart.legend.orientation = Legend.LegendOrientation.VERTICAL
+                binding.lineChart.line_chart.legend.isWordWrapEnabled = true
 
 
             }
