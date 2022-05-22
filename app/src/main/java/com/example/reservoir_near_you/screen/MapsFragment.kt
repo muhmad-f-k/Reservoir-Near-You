@@ -128,6 +128,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+//        var tgtCtr: LatLng = mMap.cameraPosition.target
         val markers = mutableListOf<Marker>()
         var markerIndex = 0
         for ((key, value ) in locationHashMap) {
@@ -145,6 +146,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
                 .target(markerPos)
                 .zoom(10f).build()
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+            mMap.isMyLocationEnabled
         }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
