@@ -7,6 +7,7 @@ import com.example.reservoir_near_you.repository.Repository
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import com.example.reservoir_near_you.model.Magasin
+import com.example.reservoir_near_you.model.MagasinX
 
 class MagasinViewModel(private val repository: Repository) : ViewModel() {
 

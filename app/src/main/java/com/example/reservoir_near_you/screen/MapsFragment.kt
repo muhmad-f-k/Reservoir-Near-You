@@ -129,6 +129,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 //        var tgtCtr: LatLng = mMap.cameraPosition.target
+/*        får index og ikke ID */
         val markers = mutableListOf<Marker>()
         var markerIndex = 0
         for ((key, value ) in locationHashMap) {

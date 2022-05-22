@@ -1,6 +1,7 @@
 package com.example.reservoir_near_you.api
 
 import com.example.reservoir_near_you.model.Magasin
+import com.example.reservoir_near_you.model.MagasinX
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Response

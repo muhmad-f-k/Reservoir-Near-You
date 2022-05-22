@@ -61,20 +61,27 @@ class MagasinFragment : Fragment() {
         val repository = Repository()
         val viewModelFactory = MagasinViewModelFactory(repository)
         val magasinId = args.magasinId
+        Log.d("maga", magasinId.toString())
         viewModel = ViewModelProvider(this, viewModelFactory)[MagasinViewModel::class.java]
         viewModel.getMagasin(magasinId)
         viewModel.magasinRespone.observe(viewLifecycleOwner, Observer { response ->
             if (response.isSuccessful){
+
+                Log.d("testwow", response.body()?.Magasin?.get(0)?.name.toString())
+          /*      Log.d("testwow", response.body()?.name.toString())*/
 /*                BarChart Code*/
                 Log.d("wow", "det funker ")
                 barList= ArrayList()
-                barList.add(BarEntry(1f,200f))
-                barList.add(BarEntry(2f,100f))
+                response.body()?.Magasin?.get(0)?.fyllingsgrad
+                    ?.let { BarEntry(1f, it) }?.let { barList.add(it) }
+
+                response.body()?.Magasin?.get(0)?.fyllingsgrad_forrige_uke?.let { BarEntry(3f, it.toFloat()) }
+                    ?.let { barList.add(it) }
                 barDataSet= BarDataSet(barList, "Vann Magasin")
                 barData= BarData(barDataSet)
                 barDataSet.setColors(ColorTemplate.JOYFUL_COLORS, 250)
                 binding.barChart.bar_chart.data=barData
-                binding.barChart.bar_chart.description.text = "Magasin Data";
+                binding.barChart.bar_chart.description.text = response.body()?.Magasin?.get(0)?.name.toString()
                 binding.barChart.bar_chart.description.textSize =13f
                 barDataSet.valueTextColor= Color.BLACK
                 barDataSet.valueTextSize=15f
