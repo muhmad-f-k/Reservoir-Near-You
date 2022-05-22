@@ -60,28 +60,28 @@ class MagasinFragment : Fragment() {
         setHasOptionsMenu(true)
         val repository = Repository()
         val viewModelFactory = MagasinViewModelFactory(repository)
-        val magasinId = args.magasinId
-        Log.d("maga", magasinId.toString())
+        val magasinNavn = args.magasinNavn
         viewModel = ViewModelProvider(this, viewModelFactory)[MagasinViewModel::class.java]
-        viewModel.getMagasin(magasinId)
+        viewModel.getMagasin(magasinNavn)
         viewModel.magasinRespone.observe(viewLifecycleOwner, Observer { response ->
             if (response.isSuccessful){
 
-                Log.d("testwow", response.body()?.Magasin?.get(0)?.name.toString())
-          /*      Log.d("testwow", response.body()?.name.toString())*/
-/*                BarChart Code*/
-                Log.d("wow", "det funker ")
-                barList= ArrayList()
-                response.body()?.Magasin?.get(0)?.fyllingsgrad
-                    ?.let { BarEntry(1f, it) }?.let { barList.add(it) }
 
-                response.body()?.Magasin?.get(0)?.fyllingsgrad_forrige_uke?.let { BarEntry(3f, it.toFloat()) }
-                    ?.let { barList.add(it) }
+                barList= ArrayList()
+                response.body()?.Magasin?.find { it.name == magasinNavn }
+                    ?.let { BarEntry(1f, it.fyllingsgrad) }?.let { barList.add(it) }
+                response.body()?.Magasin?.find { it.name == magasinNavn }
+                    ?.let { BarEntry(3f, it.fyllingsgrad_forrige_uke) }?.let { barList.add(it) }
+
+
+
+                response.body()?.Magasin?.find { it.name == magasinNavn }?.name
+
                 barDataSet= BarDataSet(barList, "Vann Magasin")
                 barData= BarData(barDataSet)
                 barDataSet.setColors(ColorTemplate.JOYFUL_COLORS, 250)
                 binding.barChart.bar_chart.data=barData
-                binding.barChart.bar_chart.description.text = response.body()?.Magasin?.get(0)?.name.toString()
+                binding.barChart.bar_chart.description.text = response.body()?.Magasin?.find { it.name == magasinNavn }?.name
                 binding.barChart.bar_chart.description.textSize =13f
                 barDataSet.valueTextColor= Color.BLACK
                 barDataSet.valueTextSize=15f
@@ -91,13 +91,16 @@ class MagasinFragment : Fragment() {
 
 /*                PieChart code*/
                 pieList = ArrayList()
-                pieList.add(PieEntry(1f,200f))
-                pieList.add(PieEntry(2f,100f))
+                response.body()?.Magasin?.find { it.name == magasinNavn }
+                    ?.let { PieEntry(1f, it.kapasitet_TWh) }?.let { pieList.add(it) }
+                response.body()?.Magasin?.find { it.name == magasinNavn }
+                    ?.let { PieEntry(2f, it.fylling_TWh) }?.let { pieList.add(it) }
+
                 pieDataSet= PieDataSet(pieList, "TWH Kapasitet")
                 pieData= PieData(pieDataSet)
                 pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS,250)
                 binding.lineChart.line_chart.data=pieData
-                binding.lineChart.line_chart.description.text = "Twh DATA";
+                binding.lineChart.line_chart.description.text = response.body()?.Magasin?.find { it.name == magasinNavn }?.name
                 binding.lineChart.line_chart.description.textSize =13f
                 pieDataSet.valueTextColor= Color.BLACK
                 pieDataSet.valueTextSize=15f

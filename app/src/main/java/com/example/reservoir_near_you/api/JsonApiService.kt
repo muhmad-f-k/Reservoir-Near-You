@@ -16,7 +16,7 @@ interface SimpleApi {
 
     @GET("/magasin")
     suspend fun getMagasin(
-        @Query("id") id: Int
+        @Query("name") name: String
     ): Response<Magasin>
 
     @GET("/magasin")

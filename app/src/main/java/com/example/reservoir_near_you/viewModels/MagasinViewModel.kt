@@ -14,9 +14,9 @@ class MagasinViewModel(private val repository: Repository) : ViewModel() {
     val magasinRespone: MutableLiveData<Response<Magasin>> = MutableLiveData()
     val allMagasinResponse: MutableLiveData<Response<Magasin>> = MutableLiveData()
 
-    fun getMagasin(id: Int){
+    fun getMagasin(name: String){
         viewModelScope.launch {
-            val response = repository.getMagasin(id)
+            val response = repository.getMagasin(name)
             magasinRespone.value = response
         }
     }

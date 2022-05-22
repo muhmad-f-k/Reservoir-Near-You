@@ -160,8 +160,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     }
 
     override fun onInfoWindowClick(marker: Marker) {
-        val reservoirId = marker.tag as Int
-        val action = MapsFragmentDirections.actionMapsFragmentToMagasinFragment(reservoirId)
+        val reservoirName = marker.title as String
+        val action = MapsFragmentDirections.actionMapsFragmentToMagasinFragment(reservoirName)
         view?.findNavController()?.navigate(action)
     }
 }

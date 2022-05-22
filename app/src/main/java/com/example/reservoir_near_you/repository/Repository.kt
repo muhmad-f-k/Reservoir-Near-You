@@ -7,8 +7,8 @@ import retrofit2.Response
 
 class Repository {
 
-    suspend fun getMagasin(id: Int): Response<Magasin> {
-        return RetrofitInstance.api.getMagasin(id)
+    suspend fun getMagasin(name: String): Response<Magasin> {
+        return RetrofitInstance.api.getMagasin(name)
     }
 
     suspend fun getAllMagasin(): Response<Magasin> {
