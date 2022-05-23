@@ -124,7 +124,7 @@ class MagasinFragment : Fragment() {
         return (when(item.itemId) {
             R.id.map -> {
                 val action = MagasinFragmentDirections.actionMagasinFragmentToMapsFragment()
-                view?.findNavController()?.navigate(action)
+                view?.findNavController()?.popBackStack()
                 true
             }
             R.id.login_logout -> {

@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -24,26 +25,25 @@ import com.example.reservoir_near_you.viewModels.MagasinViewModel
 import com.example.reservoir_near_you.viewModels.MapViewModel
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.flow.callbackFlow
 import retrofit2.Response
 
 
 class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private lateinit var viewModel: MagasinViewModel
-    private lateinit var mapViewModel: MapViewModel
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var binding: FragmentMapsBinding
     private lateinit var mMap: GoogleMap
-    private var locationHashMap: HashMap<LatLng, String> = HashMap<LatLng, String>()
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -60,6 +60,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val repository = Repository()
+        val viewModelFactory = MagasinViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[MagasinViewModel::class.java]
+        viewModel.getAllMagasin()
 
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -79,21 +83,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         )
 
         setHasOptionsMenu(true)
-        val repository = Repository()
-        binding.lifecycleOwner = this
-        val viewModelFactory = MagasinViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory)[MagasinViewModel::class.java]
-        viewModel.getAllMagasin()
-        viewModel.allMagasinResponse.observe(viewLifecycleOwner, Observer { response ->
-            if (response.isSuccessful){
-                for (i in 0 until response.body()?.Magasin!!.size){
-                    val place = LatLng(response.body()!!.Magasin.get(i).latitude, response.body()!!.Magasin.get(i).longitude)
-                    locationHashMap.put(place, response.body()!!.Magasin.get(i).name)
-                }
-            }
-        })
         binding.magasinViewModel = viewModel
-
         return binding.root
     }
 
@@ -124,33 +114,29 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         })
     }
 
-
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-//        var tgtCtr: LatLng = mMap.cameraPosition.target
-/*        får index og ikke ID */
-        val markers = mutableListOf<Marker>()
-        var markerIndex = 0
-        for ((key, value ) in locationHashMap) {
-            mMap.addMarker(MarkerOptions()
-                .position(key)
-                .title(value))
-                ?.let { markers.add(it) }
-            markers[markerIndex].tag = markerIndex + 1
-            markerIndex += 1
-        }
+
+        viewModel.allMagasinResponse.observe(viewLifecycleOwner, Observer { response ->
+            if (response.isSuccessful){
+                for (i in 0 until response.body()?.Magasin!!.size){
+                    val place = LatLng(response.body()!!.Magasin.get(i).latitude, response.body()!!.Magasin.get(i).longitude)
+                    mMap.addMarker(MarkerOptions()
+                        .position(place)
+                        .title(response.body()!!.Magasin.get(i).name))
+                }
+            }
+        })
 
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
             val markerPos = LatLng(location!!.latitude, location.longitude)
             val cameraPosition = CameraPosition.Builder()
                 .target(markerPos)
                 .zoom(10f).build()
+
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-            mMap.isMyLocationEnabled
         }
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(this)
         mMap.setOnMarkerClickListener(this)
         mMap.setOnInfoWindowClickListener(this)
     }

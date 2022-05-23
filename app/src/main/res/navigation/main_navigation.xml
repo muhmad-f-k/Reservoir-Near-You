@@ -18,11 +18,13 @@
         android:name="com.example.reservoir_near_you.screen.MapsFragment"
         tools:layout="@layout/fragment_maps">
         <action
-            android:id="@+id/action_mapsFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
             android:id="@+id/action_mapsFragment_to_magasinFragment"
-            app:destination="@id/magasinFragment" />
+            app:destination="@id/magasinFragment"
+            app:popUpTo="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/magasinFragment"
@@ -31,12 +33,14 @@
         tools:layout="@layout/fragment_magasin" >
         <action
             android:id="@+id/action_magasinFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/magasinFragment" />
         <argument
             android:name="magasinNavn"
             app:argType="string"/>
         <action
             android:id="@+id/action_magasinFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
+            app:destination="@id/mapsFragment"
+            app:popUpTo="@id/magasinFragment" />
     </fragment>
 </navigation>
