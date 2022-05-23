@@ -87,8 +87,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         viewModel.allMagasinResponse.observe(viewLifecycleOwner, Observer { response ->
             if (response.isSuccessful){
                 for (i in 0 until response.body()?.Magasin!!.size){
-                    val place = LatLng(response.body()!!.Magasin.get(i).latitude, response.body()!!.Magasin.get(i).longitude)
-                    locationHashMap.put(place, response.body()!!.Magasin.get(i).name)
+                    val place = LatLng(response.body()!!.Magasin[i].latitude, response.body()!!.Magasin[i].longitude)
+                    locationHashMap[place] = response.body()!!.Magasin[i].name
                 }
             }
         })

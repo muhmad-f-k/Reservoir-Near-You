@@ -2,30 +2,28 @@ package com.example.reservoir_near_you.screen
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavArgs
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.reservoir_near_you.R
 import com.example.reservoir_near_you.databinding.FragmentMagasinBinding
-import com.example.reservoir_near_you.model.Magasin
 import com.example.reservoir_near_you.repository.Repository
 import com.example.reservoir_near_you.viewModelFactories.MagasinViewModelFactory
 import com.example.reservoir_near_you.viewModels.MagasinViewModel
 import com.firebase.ui.auth.AuthUI
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.fragment_magasin.view.*
+
 
 class MagasinFragment : Fragment() {
 
@@ -67,12 +65,40 @@ class MagasinFragment : Fragment() {
         viewModel.magasinRespone.observe(viewLifecycleOwner, Observer { response ->
             if (response.isSuccessful){
 
+                val xAxisLabel: ArrayList<String> = ArrayList()
+                xAxisLabel.add("Fyllingsgrad")
+                xAxisLabel.add("Fyllingsgrad forrige uke")
+                xAxisLabel.add("")
+                xAxisLabel.add("")
+                xAxisLabel.add("")
+                xAxisLabel.add("")
+                xAxisLabel.add("")
+
+
+                val xAxis: XAxis = binding.barChart.bar_chart.xAxis
+                xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
+
+                val formatter: ValueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return xAxisLabel[value.toInt()]
+                    }
+                }
+
+                xAxis.granularity = 1f // minimum axis-step (interval) is 1
+
+                xAxis.valueFormatter = formatter
+
+
+
+
 
                 barList= ArrayList()
                 response.body()?.Magasin?.find { it.name == magasinNavn }
-                    ?.let { BarEntry(1f, it.fyllingsgrad) }?.let { barList.add(it) }
+                    ?.let { BarEntry(0f, it.fyllingsgrad) }?.let { barList.add(it) }
                 response.body()?.Magasin?.find { it.name == magasinNavn }
-                    ?.let { BarEntry(3f, it.fyllingsgrad_forrige_uke) }?.let { barList.add(it) }
+                    ?.let { BarEntry(1f, it.fyllingsgrad_forrige_uke) }?.let { barList.add(it) }
+                response.body()?.Magasin?.find { it.name == magasinNavn }
+                    ?.let { BarEntry(2f, it.endring_fyllingsgrad) }?.let { barList.add(it) }
 
 
 
@@ -83,13 +109,16 @@ class MagasinFragment : Fragment() {
                 barData= BarData(barDataSet)
                 barDataSet.setColors(ColorTemplate.JOYFUL_COLORS, 250)
                 binding.barChart.bar_chart.data=barData
-                binding.barChart.bar_chart.description.text = response.body()?.Magasin?.find { it.name == magasinNavn }?.name
+//                binding.barChart.bar_chart.description.text = response.body()?.Magasin?.find { it.name == magasinNavn }?.name
                 binding.barChart.bar_chart.description.textSize =13f
                 barDataSet.valueTextColor= Color.BLACK
                 barDataSet.valueTextSize=15f
                 binding.barChart.bar_chart.setDrawValueAboveBar(true)
                 binding.barChart.bar_chart.animateY(10)
                 binding.barChart.bar_chart.animateX(10)
+                binding.barChart.bar_chart.description.isEnabled = false
+//                binding.barChart.bar_chart.axisRight.isEnabled = false
+//                binding.barChart.bar_chart.legend.isEnabled = false
 
 
 
