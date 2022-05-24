@@ -34,13 +34,17 @@
         <action
             android:id="@+id/action_magasinFragment_to_mainFragment"
             app:destination="@id/mainFragment"
-            app:popUpTo="@id/magasinFragment" />
+            app:popUpTo="@id/mainFragment" />
         <argument
             android:name="magasinNavn"
             app:argType="string"/>
         <action
             android:id="@+id/action_magasinFragment_to_mapsFragment"
             app:destination="@id/mapsFragment"
+            app:popUpTo="@id/magasinFragment" />
+        <action
+            android:id="@+id/action_magasinFragment_to_mainFragment2"
+            app:destination="@id/mainFragment"
             app:popUpTo="@id/magasinFragment" />
     </fragment>
 </navigation>

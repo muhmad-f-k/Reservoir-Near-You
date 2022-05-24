@@ -106,6 +106,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
                 AuthUI.getInstance().signOut(requireContext())
                 val action = MapsFragmentDirections.actionMapsFragmentToMainFragment()
                 view?.findNavController()?.navigate(action)
+
                 true
             }
             else -> super.onOptionsItemSelected(item)

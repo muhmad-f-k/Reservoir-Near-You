@@ -83,9 +83,8 @@ class MainFragment : Fragment() {
                     binding.authButton.setOnClickListener{
                         launchSignInFlow()
                     }
-                    val action = MainFragmentDirections.actionMainFragmentToMapsFragment()
-                    view?.findNavController()?.popBackStack()
-                    view?.findNavController()?.navigate(action)
+                    /*val action = MainFragmentDirections.actionMainFragmentToMapsFragment()
+                    view?.findNavController()?.navigate(action)*/
                     activity?.invalidateOptionsMenu()
                 }
             }
