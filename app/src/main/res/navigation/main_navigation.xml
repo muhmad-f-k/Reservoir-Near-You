@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_mainFragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
@@ -25,6 +28,9 @@
             android:id="@+id/action_mapsFragment_to_mainFragment"
             app:destination="@id/mainFragment"
             app:popUpTo="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/magasinFragment"
@@ -46,5 +52,12 @@
             android:id="@+id/action_magasinFragment_to_mainFragment2"
             app:destination="@id/mainFragment"
             app:popUpTo="@id/magasinFragment" />
+        <action
+            android:id="@+id/action_magasinFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.reservoir_near_you.screen.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

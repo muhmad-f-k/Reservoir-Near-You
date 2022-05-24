@@ -1,15 +1,20 @@
 package com.example.reservoir_near_you.screen
 
 import android.app.Activity
+import android.app.UiModeManager.MODE_NIGHT_AUTO
+import android.app.UiModeManager.MODE_NIGHT_YES
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.preference.PreferenceManager
 import com.example.reservoir_near_you.R
 import com.example.reservoir_near_you.databinding.FragmentMainBinding
 import com.example.reservoir_near_you.viewModels.LoginViewModel
@@ -47,6 +52,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeAuthenticationState()
+        loadSettings()
 
         binding.authButton.setOnClickListener{ launchSignInFlow() }
     }
@@ -129,7 +135,26 @@ class MainFragment : Fragment() {
                 launchSignInFlow()
                 true
             }
+            R.id.settings -> {
+                val action = MainFragmentDirections.actionMainFragmentToSettingsFragment()
+                view?.findNavController()?.navigate(action)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         })
+    }
+
+    private fun loadSettings() {
+        val sp = context?.let { PreferenceManager.getDefaultSharedPreferences(it) }
+        val dark_mode = sp?.getBoolean("dark_mode", false)
+
+        if (dark_mode == true) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            binding.logo.setImageResource(R.drawable.logo_dark)
+        }
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            binding.logo.setImageResource(R.drawable.logo_light)
+        }
     }
 }

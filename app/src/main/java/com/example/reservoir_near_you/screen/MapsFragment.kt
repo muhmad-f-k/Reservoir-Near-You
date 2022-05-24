@@ -5,23 +5,22 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.preference.PreferenceManager
 import com.example.reservoir_near_you.R
 import com.example.reservoir_near_you.databinding.FragmentMapsBinding
 import com.example.reservoir_near_you.repository.Repository
 import com.example.reservoir_near_you.viewModelFactories.MagasinViewModelFactory
 import com.example.reservoir_near_you.viewModels.MagasinViewModel
-import com.example.reservoir_near_you.viewModels.MapViewModel
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -29,11 +28,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
-import retrofit2.Response
+import com.google.android.gms.maps.model.*
 
 
 class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
@@ -42,6 +37,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var binding: FragmentMapsBinding
     private lateinit var mMap: GoogleMap
+    var mode = "light"
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -89,6 +85,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+        loadSettings()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -110,6 +107,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
 
                 true
             }
+            R.id.settings -> {
+                val action = MapsFragmentDirections.actionMapsFragmentToSettingsFragment()
+                view?.findNavController()?.navigate(action)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         })
     }
@@ -117,6 +119,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+
+        if (mode == "dark"){
+            mMap.setMapStyle(
+                MapStyleOptions(
+                    resources
+                        .getString(R.string.style_json)
+                )
+            )
+        }
 
         viewModel.allMagasinResponse.observe(viewLifecycleOwner, Observer { response ->
             if (response.isSuccessful){
@@ -149,5 +160,19 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         val reservoirName = marker.title as String
         val action = MapsFragmentDirections.actionMapsFragmentToMagasinFragment(reservoirName)
         view?.findNavController()?.navigate(action)
+    }
+
+    private fun loadSettings() {
+        val sp = context?.let { PreferenceManager.getDefaultSharedPreferences(it) }
+        val dark_mode = sp?.getBoolean("dark_mode", false)
+
+        if (dark_mode == true) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            mode = "dark"
+        }
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            mode = "light"
+        }
     }
 }

@@ -24,7 +24,17 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_magasinFragment_to_mainFragment2">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_magasinFragment_to_mapsFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_magasinFragment_to_settingsFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -46,6 +56,11 @@
                         <option name="myPositions">
                           <map>
                             <entry key="action_mainFragment_to_mapsFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_mainFragment_to_settingsFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -76,7 +91,24 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_mapsFragment_to_settingsFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="settingsFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="200" />
+                            <option name="y" value="459" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>

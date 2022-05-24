@@ -3,12 +3,14 @@ package com.example.reservoir_near_you.screen
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.preference.PreferenceManager
 import com.example.reservoir_near_you.R
 import com.example.reservoir_near_you.databinding.FragmentMagasinBinding
 import com.example.reservoir_near_you.repository.Repository
@@ -161,6 +163,11 @@ class MagasinFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadSettings()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -184,8 +191,25 @@ class MagasinFragment : Fragment() {
                 view?.findNavController()?.navigate(action)
                 true
             }
+            R.id.settings -> {
+                val action = MagasinFragmentDirections.actionMagasinFragmentToSettingsFragment()
+                view?.findNavController()?.navigate(action)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         })
+    }
+
+    private fun loadSettings() {
+        val sp = context?.let { PreferenceManager.getDefaultSharedPreferences(it) }
+        val dark_mode = sp?.getBoolean("dark_mode", false)
+
+        if (dark_mode == true) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
     }
 
 }
