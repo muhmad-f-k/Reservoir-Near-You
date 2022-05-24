@@ -145,8 +145,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             val markerPos = LatLng(location!!.latitude, location.longitude)
             val cameraPosition = CameraPosition.Builder()
                 .target(markerPos)
-                .zoom(10f).build()
-            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+                .zoom(10f).bearing(90f).tilt(30f).build()
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(10f), 2000, null)
             mMap.isMyLocationEnabled
         }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
