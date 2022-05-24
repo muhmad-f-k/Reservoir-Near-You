@@ -37,9 +37,9 @@ class MagasinFragment : Fragment() {
     lateinit var barData: BarData
 
 /*    PieChart Code*/
-    private lateinit var pieList : ArrayList<PieEntry>
-    private lateinit var pieDataSet:PieDataSet
-    private lateinit var pieData:PieData
+    private lateinit var pieList : ArrayList<BarEntry>
+    private lateinit var pieDataSet:BarDataSet
+    private lateinit var pieData:BarData
 
     val args: MagasinFragmentArgs by navArgs()
 
@@ -97,8 +97,8 @@ class MagasinFragment : Fragment() {
                     ?.let { BarEntry(0f, it.fyllingsgrad) }?.let { barList.add(it) }
                 response.body()?.Magasin?.find { it.name == magasinNavn }
                     ?.let { BarEntry(1f, it.fyllingsgrad_forrige_uke) }?.let { barList.add(it) }
-                response.body()?.Magasin?.find { it.name == magasinNavn }
-                    ?.let { BarEntry(2f, it.endring_fyllingsgrad) }?.let { barList.add(it) }
+//                response.body()?.Magasin?.find { it.name == magasinNavn }
+//                    ?.let { BarEntry(2f, it.endring_fyllingsgrad) }?.let { barList.add(it) }
 
 
 
@@ -113,26 +113,30 @@ class MagasinFragment : Fragment() {
                 binding.barChart.bar_chart.description.textSize =13f
                 barDataSet.valueTextColor= Color.BLACK
                 barDataSet.valueTextSize=15f
-                binding.barChart.bar_chart.setDrawValueAboveBar(true)
+/*                binding.barChart.bar_chart.setDrawValueAboveBar(true)*/
                 binding.barChart.bar_chart.animateY(10)
                 binding.barChart.bar_chart.animateX(10)
                 binding.barChart.bar_chart.description.isEnabled = false
-//                binding.barChart.bar_chart.axisRight.isEnabled = false
-//                binding.barChart.bar_chart.legend.isEnabled = false
+                binding.barChart.bar_chart.axisLeft.axisMinimum=0f
+                binding.barChart.bar_chart.axisLeft.axisMaximum=1.5f
+                binding.barChart.bar_chart.axisRight.axisMinimum=0f
+                binding.barChart.bar_chart.axisRight.axisMaximum=1.5f
 
 
 
 
 
 /*                PieChart code*/
+
+
                 pieList = ArrayList()
                 response.body()?.Magasin?.find { it.name == magasinNavn }
-                    ?.let { PieEntry(1f, it.kapasitet_TWh) }?.let { pieList.add(it) }
+                    ?.let { BarEntry(1f, it.kapasitet_TWh) }?.let { pieList.add(it) }
                 response.body()?.Magasin?.find { it.name == magasinNavn }
-                    ?.let { PieEntry(2f, it.fylling_TWh) }?.let { pieList.add(it) }
+                    ?.let { BarEntry(2f, it.fylling_TWh) }?.let { pieList.add(it) }
 
-                pieDataSet= PieDataSet(pieList, "TWH Kapasitet")
-                pieData= PieData(pieDataSet)
+                pieDataSet= BarDataSet(pieList, "TWH Kapasitet")
+                pieData= BarData(pieDataSet)
                 pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS,250)
                 binding.lineChart.line_chart.data=pieData
                 binding.lineChart.line_chart.description.text = response.body()?.Magasin?.find { it.name == magasinNavn }?.name
@@ -141,22 +145,11 @@ class MagasinFragment : Fragment() {
                 pieDataSet.valueTextSize=15f
                 binding.lineChart.line_chart.animateY(10)
                 binding.lineChart.line_chart.animateX(10)
-
-
-
-                binding.lineChart.line_chart.setUsePercentValues(true)
-                binding.lineChart.line_chart.setDrawEntryLabels(true)
-                //hollow pie chart
-//                binding.lineChart.line_chart.isDrawHoleEnabled = false
-//                binding.lineChart.line_chart.setTouchEnabled(false)
-//                binding.lineChart.line_chart.setDrawEntryLabels(false)
-                //adding padding
-                binding.lineChart.line_chart.setExtraOffsets(20f, 0f, 20f, 20f)
-                binding.lineChart.line_chart.setUsePercentValues(true)
-                binding.lineChart.line_chart.isRotationEnabled = false
-                binding.lineChart.line_chart.setDrawEntryLabels(false)
-                binding.lineChart.line_chart.legend.orientation = Legend.LegendOrientation.VERTICAL
-                binding.lineChart.line_chart.legend.isWordWrapEnabled = true
+                binding.lineChart.line_chart.axisLeft.axisMinimum=0f
+                binding.lineChart.line_chart.axisLeft.axisMaximum=40f
+                binding.lineChart.line_chart.axisRight.axisMinimum=0f
+                binding.lineChart.line_chart.axisRight.axisMaximum=40f
+                binding.lineChart.line_chart.description.setPosition(50f,50f)
 
 
             }
