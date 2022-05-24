@@ -173,6 +173,11 @@ class MagasinFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.login).isVisible = false
+        super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return (when(item.itemId) {
             R.id.map -> {
@@ -180,7 +185,7 @@ class MagasinFragment : Fragment() {
                 view?.findNavController()?.popBackStack()
                 true
             }
-            R.id.login_logout -> {
+            R.id.logout -> {
                 AuthUI.getInstance().signOut(requireContext())
                 val action = MagasinFragmentDirections.actionMagasinFragmentToMainFragment()
                 view?.findNavController()?.navigate(action)

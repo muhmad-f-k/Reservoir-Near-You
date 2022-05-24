@@ -97,12 +97,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.map).isVisible= false
+        menu.findItem(R.id.map).isVisible = false
+        menu.findItem(R.id.login).isVisible = false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return (when(item.itemId) {
-            R.id.login_logout -> {
+            R.id.logout -> {
                 AuthUI.getInstance().signOut(requireContext())
                 val action = MapsFragmentDirections.actionMapsFragmentToMainFragment()
                 view?.findNavController()?.navigate(action)
@@ -120,10 +121,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         viewModel.allMagasinResponse.observe(viewLifecycleOwner, Observer { response ->
             if (response.isSuccessful){
                 for (i in 0 until response.body()?.Magasin!!.size){
-                    val place = LatLng(response.body()!!.Magasin.get(i).latitude, response.body()!!.Magasin.get(i).longitude)
+                    val place = LatLng(response.body()!!.Magasin[i].latitude, response.body()!!.Magasin[i].longitude)
                     mMap.addMarker(MarkerOptions()
                         .position(place)
-                        .title(response.body()!!.Magasin.get(i).name))
+                        .title(response.body()!!.Magasin[i].name))
                 }
             }
         })

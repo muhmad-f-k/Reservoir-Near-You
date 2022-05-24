@@ -83,8 +83,6 @@ class MainFragment : Fragment() {
                     binding.authButton.setOnClickListener{
                         launchSignInFlow()
                     }
-                    /*val action = MainFragmentDirections.actionMainFragmentToMapsFragment()
-                    view?.findNavController()?.navigate(action)*/
                     activity?.invalidateOptionsMenu()
                 }
             }
@@ -109,7 +107,10 @@ class MainFragment : Fragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         if (viewModel.authenticationState.value != LoginViewModel.AuthenticationState.AUTHENTICATED) {
             menu.findItem(R.id.map).isEnabled = false
-            menu.findItem(R.id.login_logout).isVisible = false
+            menu.findItem(R.id.logout).isVisible = false
+        }
+        else{
+            menu.findItem(R.id.login).isVisible = false
         }
     }
 
@@ -120,8 +121,12 @@ class MainFragment : Fragment() {
                 view?.findNavController()?.navigate(action)
                 true
             }
-            R.id.login_logout -> {
+            R.id.logout -> {
                 AuthUI.getInstance().signOut(requireContext())
+                true
+            }
+            R.id.login -> {
+                launchSignInFlow()
                 true
             }
             else -> super.onOptionsItemSelected(item)
