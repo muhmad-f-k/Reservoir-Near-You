@@ -24,6 +24,8 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.MapStyleOptions
+import kotlinx.android.synthetic.main.fragment_magasin.*
 import kotlinx.android.synthetic.main.fragment_magasin.view.*
 
 
@@ -32,6 +34,7 @@ class MagasinFragment : Fragment() {
     private lateinit var viewModel: MagasinViewModel
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var binding: FragmentMagasinBinding
+    private var mode = "light"
 
 /*    BarChart Code*/
     lateinit var barList : ArrayList<BarEntry>
@@ -64,6 +67,7 @@ class MagasinFragment : Fragment() {
         val magasinNavn = args.magasinNavn
         viewModel = ViewModelProvider(this, viewModelFactory)[MagasinViewModel::class.java]
         viewModel.getMagasin(magasinNavn)
+        loadSettings()
         viewModel.magasinRespone.observe(viewLifecycleOwner, Observer { response ->
             if (response.isSuccessful){
 
@@ -89,8 +93,7 @@ class MagasinFragment : Fragment() {
                 xAxis.granularity = 1f // minimum axis-step (interval) is 1
 
                 xAxis.valueFormatter = formatter
-
-
+                xAxis.textSize = 11f
 
 
 
@@ -139,7 +142,7 @@ class MagasinFragment : Fragment() {
 
                 pieDataSet= BarDataSet(pieList, "TWH Kapasitet")
                 pieData= BarData(pieDataSet)
-                pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS,250)
+                pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS,250)
                 binding.lineChart.line_chart.data=pieData
                 binding.lineChart.line_chart.description.text = response.body()?.Magasin?.find { it.name == magasinNavn }?.name
                 binding.lineChart.line_chart.description.textSize =13f
@@ -153,19 +156,23 @@ class MagasinFragment : Fragment() {
                 binding.lineChart.line_chart.axisRight.axisMaximum=40f
                 binding.lineChart.line_chart.description.setPosition(50f,50f)
 
-
+                if (mode == "dark"){
+                    xAxis.textColor = Color.WHITE
+                    binding.barChart.bar_chart.description.textColor = Color.WHITE
+                    pieDataSet.valueTextColor= Color.WHITE
+                    binding.barChart.bar_chart.legend.textColor = Color.WHITE
+                    binding.lineChart.line_chart.legend.textColor = Color.WHITE
+                    binding.lineChart.line_chart.axisLeft.textColor = Color.WHITE
+                    binding.lineChart.line_chart.axisRight.textColor = Color.WHITE
+                    binding.barChart.bar_chart.axisLeft.textColor = Color.WHITE
+                    binding.barChart.bar_chart.axisRight.textColor = Color.WHITE
+                }
             }
-
         })
 
         binding.magasinViewModel = viewModel
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        loadSettings()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -206,9 +213,11 @@ class MagasinFragment : Fragment() {
 
         if (dark_mode == true) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            mode = "dark"
         }
         else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            mode = "light"
         }
     }
 
