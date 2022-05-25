@@ -27,18 +27,15 @@
         </ImageView>
 
         <TextView
-            android:id="@+id/auth_button"
+            android:id="@+id/welcome_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:background="@color/colorAccent"
             android:padding="@dimen/text_padding"
-            android:textColor="@color/white"
+            android:textColor="@color/p_text"
             android:textSize="@dimen/button_text_size"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/login_button_text"/>
+            app:layout_constraintTop_toBottomOf="@+id/logo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

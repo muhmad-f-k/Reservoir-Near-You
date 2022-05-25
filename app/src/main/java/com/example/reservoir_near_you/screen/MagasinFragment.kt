@@ -32,7 +32,6 @@ import kotlinx.android.synthetic.main.fragment_magasin.view.*
 class MagasinFragment : Fragment() {
 
     private lateinit var viewModel: MagasinViewModel
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var binding: FragmentMagasinBinding
     private var mode = "light"
 
@@ -46,14 +45,12 @@ class MagasinFragment : Fragment() {
     private lateinit var pieDataSet:BarDataSet
     private lateinit var pieData:BarData
 
-    val args: MagasinFragmentArgs by navArgs()
+    private val args: MagasinFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireContext())
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_magasin,
@@ -90,7 +87,7 @@ class MagasinFragment : Fragment() {
                     }
                 }
 
-                xAxis.granularity = 1f // minimum axis-step (interval) is 1
+                xAxis.granularity = 1f
 
                 xAxis.valueFormatter = formatter
                 xAxis.textSize = 11f
@@ -102,43 +99,55 @@ class MagasinFragment : Fragment() {
                     ?.let { BarEntry(0f, it.fyllingsgrad) }?.let { barList.add(it) }
                 response.body()?.Magasin?.find { it.name == magasinNavn }
                     ?.let { BarEntry(1f, it.fyllingsgrad_forrige_uke) }?.let { barList.add(it) }
-//                response.body()?.Magasin?.find { it.name == magasinNavn }
-//                    ?.let { BarEntry(2f, it.endring_fyllingsgrad) }?.let { barList.add(it) }
 
-
-
-
-                response.body()?.Magasin?.find { it.name == magasinNavn }?.name
 
                 barDataSet= BarDataSet(barList, "Vann Magasin")
                 barData= BarData(barDataSet)
                 barDataSet.setColors(ColorTemplate.JOYFUL_COLORS, 250)
                 binding.barChart.bar_chart.data=barData
-//                binding.barChart.bar_chart.description.text = response.body()?.Magasin?.find { it.name == magasinNavn }?.name
                 binding.barChart.bar_chart.description.textSize =13f
                 barDataSet.valueTextColor= Color.BLACK
                 barDataSet.valueTextSize=15f
-/*                binding.barChart.bar_chart.setDrawValueAboveBar(true)*/
                 binding.barChart.bar_chart.animateY(10)
                 binding.barChart.bar_chart.animateX(10)
                 binding.barChart.bar_chart.description.isEnabled = false
                 binding.barChart.bar_chart.axisLeft.axisMinimum=0f
-                binding.barChart.bar_chart.axisLeft.axisMaximum=1.5f
+
+                if (response.body()?.Magasin?.find { it.name == magasinNavn }?.fyllingsgrad!! > response.body()?.Magasin?.find { it.name == magasinNavn }?.fyllingsgrad_forrige_uke!!){
+                    binding.barChart.bar_chart.axisLeft.axisMaximum= response.body()?.Magasin?.find { it.name == magasinNavn }?.fyllingsgrad!!
+                }
+                else binding.barChart.bar_chart.axisLeft.axisMaximum= response.body()?.Magasin?.find { it.name == magasinNavn }?.fyllingsgrad_forrige_uke!!
+
                 binding.barChart.bar_chart.axisRight.axisMinimum=0f
                 binding.barChart.bar_chart.axisRight.axisMaximum=1.5f
 
-
-
-
-
 /*                PieChart code*/
 
+                val xAxisLabelOne: ArrayList<String> = ArrayList()
+                xAxisLabelOne.add("Kapasitet TWh")
+                xAxisLabelOne.add("fylling TWh")
+                xAxisLabelOne.add("")
+                xAxisLabelOne.add("")
+                xAxisLabelOne.add("")
+                xAxisLabelOne.add("")
+                xAxisLabelOne.add("")
+
+                val xAxisOne: XAxis = binding.lineChart.line_chart.xAxis
+                xAxisOne.position = XAxis.XAxisPosition.BOTTOM_INSIDE
+                val formatterOne: ValueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return xAxisLabelOne[value.toInt()]
+                    }
+                }
+
+                xAxisOne.granularity = 1f
+                xAxisOne.valueFormatter = formatterOne
 
                 pieList = ArrayList()
                 response.body()?.Magasin?.find { it.name == magasinNavn }
-                    ?.let { BarEntry(1f, it.kapasitet_TWh) }?.let { pieList.add(it) }
+                    ?.let { BarEntry(0f, it.kapasitet_TWh) }?.let { pieList.add(it) }
                 response.body()?.Magasin?.find { it.name == magasinNavn }
-                    ?.let { BarEntry(2f, it.fylling_TWh) }?.let { pieList.add(it) }
+                    ?.let { BarEntry(1f, it.fylling_TWh) }?.let { pieList.add(it) }
 
                 pieDataSet= BarDataSet(pieList, "TWH Kapasitet")
                 pieData= BarData(pieDataSet)
@@ -151,27 +160,29 @@ class MagasinFragment : Fragment() {
                 binding.lineChart.line_chart.animateY(10)
                 binding.lineChart.line_chart.animateX(10)
                 binding.lineChart.line_chart.axisLeft.axisMinimum=0f
-                binding.lineChart.line_chart.axisLeft.axisMaximum=40f
+                binding.lineChart.line_chart.axisLeft.axisMaximum=response.body()?.Magasin?.find { it.name == magasinNavn }?.kapasitet_TWh!! + 5f
                 binding.lineChart.line_chart.axisRight.axisMinimum=0f
                 binding.lineChart.line_chart.axisRight.axisMaximum=40f
-                binding.lineChart.line_chart.description.setPosition(50f,50f)
+                binding.lineChart.line_chart.description.setPosition(810f,665f)
 
                 if (mode == "dark"){
                     xAxis.textColor = Color.WHITE
+                    xAxisOne.textColor = Color.WHITE
                     binding.barChart.bar_chart.description.textColor = Color.WHITE
                     pieDataSet.valueTextColor= Color.WHITE
+                    barDataSet.valueTextColor= Color.WHITE
                     binding.barChart.bar_chart.legend.textColor = Color.WHITE
                     binding.lineChart.line_chart.legend.textColor = Color.WHITE
                     binding.lineChart.line_chart.axisLeft.textColor = Color.WHITE
                     binding.lineChart.line_chart.axisRight.textColor = Color.WHITE
                     binding.barChart.bar_chart.axisLeft.textColor = Color.WHITE
                     binding.barChart.bar_chart.axisRight.textColor = Color.WHITE
+                    binding.lineChart.line_chart.description.textColor = Color.WHITE
                 }
             }
         })
 
         binding.magasinViewModel = viewModel
-
         return binding.root
     }
 

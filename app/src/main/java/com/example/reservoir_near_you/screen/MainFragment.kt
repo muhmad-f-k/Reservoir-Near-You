@@ -5,6 +5,7 @@ import android.app.UiModeManager.MODE_NIGHT_AUTO
 import android.app.UiModeManager.MODE_NIGHT_YES
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -15,12 +16,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
+import com.example.reservoir_near_you.FirebaseUserLiveData
 import com.example.reservoir_near_you.R
 import com.example.reservoir_near_you.databinding.FragmentMainBinding
 import com.example.reservoir_near_you.viewModels.LoginViewModel
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment() {
 
@@ -44,17 +48,13 @@ class MainFragment : Fragment() {
             false
         )
         setHasOptionsMenu(true)
-
-
+        observeAuthenticationState()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeAuthenticationState()
         loadSettings()
-
-        binding.authButton.setOnClickListener{ launchSignInFlow() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -78,18 +78,14 @@ class MainFragment : Fragment() {
         viewModel.authenticationState.observe(viewLifecycleOwner, Observer { authenticationState ->
             when (authenticationState) {
                 LoginViewModel.AuthenticationState.AUTHENTICATED -> {
-                    binding.authButton.text = getString(R.string.logout_button_text)
-                    binding.authButton.setOnClickListener {
-                        AuthUI.getInstance().signOut(requireContext())
-                        requireActivity().invalidateOptionsMenu()
-                    }
+                    Log.d(TAG, "AUTHENTICATED")
+                    binding.welcomeText.text="Velkommen. ${FirebaseAuth.getInstance().currentUser?.displayName}. I denne appen kan du se alle vannmagasinene i nærheten av deg og se hvert magasin sitt fyllingsnivå."
+                    activity?.invalidateOptionsMenu()
                 }
                 else -> {
-                    binding.authButton.text = getString(R.string.login_button_text)
-                    binding.authButton.setOnClickListener{
-                        launchSignInFlow()
-                    }
+                    Log.d(TAG, "UNAUTHENTICATED")
                     activity?.invalidateOptionsMenu()
+                    binding.welcomeText.text="Logg inn for å få tilgang til kartet"
                 }
             }
         })
@@ -123,12 +119,13 @@ class MainFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return (when(item.itemId) {
             R.id.map -> {
-                var action = MainFragmentDirections.actionMainFragmentToMapsFragment()
+                val action = MainFragmentDirections.actionMainFragmentToMapsFragment()
                 view?.findNavController()?.navigate(action)
                 true
             }
             R.id.logout -> {
                 AuthUI.getInstance().signOut(requireContext())
+                activity?.invalidateOptionsMenu()
                 true
             }
             R.id.login -> {
@@ -151,6 +148,7 @@ class MainFragment : Fragment() {
         if (dark_mode == true) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             binding.logo.setImageResource(R.drawable.logo_dark)
+            binding.welcomeText.setTextColor(Color.WHITE)
         }
         else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)

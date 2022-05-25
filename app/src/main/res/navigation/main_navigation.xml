@@ -8,6 +8,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.reservoir_near_you.screen.MainFragment"
+        android:label="Reservoir Near You"
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_mapsFragment"
@@ -19,6 +20,7 @@
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.reservoir_near_you.screen.MapsFragment"
+        android:label="Reservoir Near You"
         tools:layout="@layout/fragment_maps">
         <action
             android:id="@+id/action_mapsFragment_to_magasinFragment"
@@ -35,15 +37,15 @@
     <fragment
         android:id="@+id/magasinFragment"
         android:name="com.example.reservoir_near_you.screen.MagasinFragment"
-        android:label="fragment_magasin"
-        tools:layout="@layout/fragment_magasin" >
+        android:label="Reservoir Near You"
+        tools:layout="@layout/fragment_magasin">
         <action
             android:id="@+id/action_magasinFragment_to_mainFragment"
             app:destination="@id/mainFragment"
             app:popUpTo="@id/mainFragment" />
         <argument
             android:name="magasinNavn"
-            app:argType="string"/>
+            app:argType="string" />
         <action
             android:id="@+id/action_magasinFragment_to_mapsFragment"
             app:destination="@id/mapsFragment"
@@ -59,5 +61,5 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.reservoir_near_you.screen.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="Reservoir Near You" />
 </navigation>
