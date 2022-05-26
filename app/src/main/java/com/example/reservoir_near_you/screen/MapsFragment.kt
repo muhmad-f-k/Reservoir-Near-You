@@ -43,6 +43,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) {
+            val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+            mapFragment?.getMapAsync(this)
             Toast.makeText(requireContext(), "Du har gitt oss tillatelse til å bruke din posisjon", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(requireContext(), "Beklager, du har valgt å ikke dele din posisjon", Toast.LENGTH_SHORT).show()
@@ -144,7 +146,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             val cameraPosition = CameraPosition.Builder()
                 .target(markerPos)
                 .zoom(10f).build()
-
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
         }
         mMap.setOnMarkerClickListener(this)

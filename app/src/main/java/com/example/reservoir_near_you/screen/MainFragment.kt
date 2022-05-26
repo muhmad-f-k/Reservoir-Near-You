@@ -79,7 +79,7 @@ class MainFragment : Fragment() {
             when (authenticationState) {
                 LoginViewModel.AuthenticationState.AUTHENTICATED -> {
                     Log.d(TAG, "AUTHENTICATED")
-                    binding.welcomeText.text="Velkommen. ${FirebaseAuth.getInstance().currentUser?.displayName}. I denne appen kan du se alle vannmagasinene i nærheten av deg og se hvert magasin sitt fyllingsnivå."
+                    binding.welcomeText.text="Velkommen, ${FirebaseAuth.getInstance().currentUser?.displayName}. I denne appen kan du se alle vannmagasinene i nærheten av deg og se hvert magasin sitt fyllingsnivå."
                     activity?.invalidateOptionsMenu()
                 }
                 else -> {
